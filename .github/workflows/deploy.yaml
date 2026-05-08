@@ -48,7 +48,9 @@ jobs:
             ssh -i chave-next.pem -o StrictHostKeyChecking=no ec2-user@$PUBLIC_IP << EOF
               aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 933063452766.dkr.ecr.us-east-1.amazonaws.com
               docker pull 933063452766.dkr.ecr.us-east-1.amazonaws.com/projeto_prod:v1.0
-              docker run -d -p 80:80 --name site 933063452766.dkr.ecr.us-east-1.amazonaws.com/projeto_prod:v1.0
+              docker stop site || true 
+              docker rm site || true
+              docker run -d -p 80:3000 --name site 933063452766.dkr.ecr.us-east-1.amazonaws.com/projeto_prod:v1.0
               docker ps
             EOF
             rm chave-next.pem
